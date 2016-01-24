@@ -1,0 +1,452 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+	<Script file="localisation.en.lua"/>
+	<Script file="localisation.de.lua"/>
+	<Script file="localisation.kr.lua"/>
+	<Script file="data.lua"/>
+	<Script file="Nauticus.lua"/>
+
+	<CheckButton name="NautCheckButtonTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="25" y="25"/>
+		</Size>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString inherits="GameFontNormalSmall" name="$parentText">
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="RIGHT">
+							<Offset>
+								<AbsDimension x="-2" y="2"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<NormalTexture file="Interface\Buttons\UI-CheckBox-Up"/>
+		<PushedTexture file="Interface\Buttons\UI-CheckBox-Down"/>
+		<HighlightTexture file="Interface\Buttons\UI-CheckBox-Highlight" alphaMode="ADD"/>
+		<CheckedTexture file="Interface\Buttons\UI-CheckBox-Check"/>
+		<DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>
+	</CheckButton>
+
+	<Frame name="NautHeaderFrame" frameStrata="BACKGROUND" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="210" y="26"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="3" right="4" top="5" bottom="5"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="16"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="16"/>
+			</EdgeSize>
+		</Backdrop>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture name="$parentIcon" file="Interface\AddOns\Nauticus\Artwork\NauticusLogo">
+					<Size>
+						<AbsDimension x="16" y="16"/>
+					</Size>					
+					<Anchors>
+						<Anchor point="BOTTOMLEFT">
+							<Offset>
+								<AbsDimension x="8" y="5"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="MEDIUM">
+				<FontString name="$parentAddonName" inherits="GameFontNormal" text="Nauticus" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="200" y="18"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentIcon">
+							<Offset>
+								<AbsDimension x="6" y="1"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parentCloseButton" inherits="UIPanelButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="RIGHT" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="-6" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						Naut_Close_OnClick()
+					</OnClick>
+				</Scripts>
+				<NormalTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Up">
+					<TexCoords left="0.175" top="0.175" right="0.825" bottom="0.825"/>
+				</NormalTexture>
+				<PushedTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Down">
+					<TexCoords left="0.175" top="0.175" right="0.825" bottom="0.825"/>
+				</PushedTexture>
+			</Button>
+			<Button name="$parentMinimizeButton" inherits="UIPanelButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parentCloseButton">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						Naut_Minimize_OnClick()
+					</OnClick>
+				</Scripts>
+				<NormalTexture file="Interface\Buttons\UI-MinusButton-UP">
+					<TexCoords left="0.05" top="0.05" right="0.95" bottom="0.95"/>
+				</NormalTexture>
+				<PushedTexture file="Interface\Buttons\UI-MinusButton-DOWN">
+					<TexCoords left="0.05" top="0.05" right="0.95" bottom="0.95"/>
+				</PushedTexture>
+			</Button>
+			<Button name="$parentOptionsButton" inherits="UIPanelButtonTemplate">
+				<Size>
+					<AbsDimension x="15" y="15"/>
+				</Size>
+				<Anchors>
+					<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parentMinimizeButton">
+						<Offset>
+							<AbsDimension x="-4" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						Naut_Options_OnClick()
+					</OnClick>
+				</Scripts>
+				<Layers>
+					<Layer level="BORDER">
+						<Texture>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset x="2" y="-2"/>
+								</Anchor>
+								<Anchor point="BOTTOMRIGHT">
+									<Offset x="-2" y="2"/>
+								</Anchor>
+							</Anchors>
+							<Color r="0.7" g="0" b="0"/>
+						</Texture>
+					</Layer>
+				</Layers>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-Chat-Up">
+					<TexCoords left="0.1" top="0.1" right="0.9" bottom="0.9"/>
+				</NormalTexture>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-Chat-Down">
+					<TexCoords left="0.1" top="0.1" right="0.9" bottom="0.9"/>
+				</PushedTexture>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				this:SetBackdropColor(103/255, 2/255, 6/255, 1)
+				this:SetBackdropBorderColor(1, 0, 0, 0.5)
+			</OnLoad>
+			<OnMouseUp>
+				if ( this.isMoving ) then
+					this:StopMovingOrSizing()
+					this.isMoving = false
+					Naut_UpdateUI()
+				end
+			</OnMouseUp>
+			<OnMouseDown>
+				if ( ( not this.isLocked ) or ( this.isLocked == 0 ) ) and ( arg1 == "LeftButton" ) then
+					this:StartMoving()
+					this.isMoving = true
+				end
+			</OnMouseDown>
+		</Scripts>
+	</Frame>
+
+	<Frame name="NautFrame" frameStrata="BACKGROUND" enableMouse="true" parent="NautHeaderFrame" hidden="true">
+		<Size>
+			<AbsDimension x="210" y="95"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="NautHeaderFrame">
+				<Offset>
+					<AbsDimension x="0" y="5"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="3" right="4" top="5" bottom="5"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="16"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="16"/>
+			</EdgeSize>
+		</Backdrop>
+		<Layers>
+			<Layer level="MEDIUM">
+				<FontString name="$parentPlat1Name" inherits="GameFontNormal" justifyH="CENTER">
+					<Size>
+						<AbsDimension x="100" y="18"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="9" y="-10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentPlat2Name" inherits="GameFontNormal" justifyH="CENTER">
+					<Size>
+						<AbsDimension x="100" y="18"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$parentPlat1Name">
+							<Offset>
+								<AbsDimension x="-10" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentPlat1ArrivalDepature" inherits="GameFontNormal" justifyH="CENTER">
+					<Size>
+						<AbsDimension x="100" y="18"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT"  relativePoint="BOTTOMLEFT" relativeTo="$parentPlat1Name">
+							<Offset>
+								<AbsDimension x="0" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentPlat2ArrivalDepature" inherits="GameFontNormal" justifyH="CENTER">
+					<Size>
+						<AbsDimension x="100" y="18"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parentPlat2Name">
+							<Offset>
+								<AbsDimension x="0" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parentTransportSelect" inherits="UIDropDownMenuTemplate" parent="NautFrame">
+				<Anchors>
+					<Anchor point="BOTTOM" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="0" y="9"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnShow>
+						Naut_TransportSelect_OnShow()
+					</OnShow>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				this:SetBackdropColor(1, 0, 0, 0.3)
+				this:SetBackdropBorderColor(1, 0, 0, 0.5)
+			</OnLoad>
+		</Scripts>
+	</Frame>
+
+	<Frame name="NautOptionsFrame" frameStrata="HIGH" enableMouse="true" movable="true" parent="UIParent" hidden="true">
+		<Size>
+			<AbsDimension x="320" y="128"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32"/>
+			</EdgeSize>
+		</Backdrop>
+		<Layers>
+			<Layer level="MEDIUM">
+				<FontString name="$parentOptionsTitle" inherits="GameFontNormal" text="ZM Options" justifyH="Left">
+					<Size>
+						<AbsDimension x="200" y="18"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="9" y="10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<CheckButton name="$parentOptZoneGUI" inherits="NautCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="15" y="-30"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(Naut_localise["OPT_ZONEGUI"])
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentOptFactionSpecific" inherits="NautCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parentOptZoneGUI">
+						<Offset>
+							<AbsDimension x="0" y="2"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(Naut_localise["OPT_FACTION"])
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentOptZoneSpecific" inherits="NautCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parentOptFactionSpecific">
+						<Offset>
+							<AbsDimension x="0" y="2"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(Naut_localise["OPT_ZONE"])
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parentOptCityAlias" inherits="NautCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parentOptZoneSpecific">
+						<Offset>
+							<AbsDimension x="0" y="2"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(Naut_localise["OPT_ALIAS"])
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<Button name="$parentCloseOptionsButton" inherits="UIPanelButtonTemplate">
+				<Size>
+					<AbsDimension x="50" y="20"/>
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="-18" y="15"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						this:SetText(Naut_localise["CLOSE"])
+					</OnLoad>
+					<OnClick>
+						Naut_OptionsClose_OnClick()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentSaveOptionsButton" inherits="UIPanelButtonTemplate">
+				<Size>
+					<AbsDimension x="50" y="20"/>
+				</Size>
+				<Anchors>
+					<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parentCloseOptionsButton">
+						<Offset>
+							<AbsDimension x="-4" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						this:SetText(Naut_localise["SAVE"])
+					</OnLoad>
+					<OnClick>
+						Naut_OptionsSave_OnClick()
+					</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnMouseUp>
+				if ( this.isMoving ) then
+					this:StopMovingOrSizing()
+					this.isMoving = false
+				end
+			</OnMouseUp>
+			<OnMouseDown>
+				if ( ( not this.isLocked ) or ( this.isLocked == 0 ) ) and ( arg1 == "LeftButton" ) then
+					this:StartMoving()
+					this.isMoving = true
+				end
+			</OnMouseDown>
+		</Scripts>
+	</Frame>
+
+	<Frame name="NautDataTrackerFrame" frameStrata="BACKGROUND" parent="UIParent">
+		<Scripts>
+			<OnLoad>
+				Nauticus:OnLoad()
+			</OnLoad>
+			<OnEvent>
+				Nauticus:OnEvent(event)
+			</OnEvent>
+			<OnUpdate>
+				Nauticus:OnUpdate(arg1)
+			</OnUpdate>
+		</Scripts>
+	</Frame>
+
+</Ui>
