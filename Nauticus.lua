@@ -23,6 +23,8 @@ Nauticus.activeData = { [0] = 0, [1] = 0 }
 Nauticus.tempText = ""
 Nauticus.tempTextCount = 0
 Nauticus.updateNow = false
+Nauticus.msgCache = {}
+Nauticus.msgThrottle = 1
 
 -- local variables
 local vars_loaded = false
@@ -34,7 +36,6 @@ local lastcheck_timeout = 10
 local dataChannel = "NauticSync"
 local nautVersion = "2.0"
 local nautVersionNum = 200
---local protoVersion = "1.7"
 local newVerAvail = false
 local req_timeout
 local knownTimesReq = {}
@@ -136,6 +137,9 @@ function Nauticus:OnUpdate(elapse)
 	ctime_elapse = ctime_elapse + elapse
 	if (ctime_elapse > update_int or Nauticus.updateNow) then
 		ctime_elapse = 0
+    if table.getn(Nauticus.msgCache) > 0 then
+      Naut_SendMessage()
+    end
 
 		if ( (self.activeTransit ~= -1) and (nautSavedVars.knownTimes[self.activeTransit] ~= nil) ) then
 			local transit = self.activeTransit
@@ -238,6 +242,7 @@ function Nauticus:OnUpdate(elapse)
 
 	if IsInInstance() --[[or IsSwimming()]] then return end
 
+  local x,y
 	if (MapLibrary and MapLibrary.Ready) then
 		--if MapLibrary.InInstance() then return; end
 		-- try to get player coords without zooming map
@@ -702,8 +707,30 @@ local function Nauticus_InitialiseConfig()
 
 end
 
+local lastMessage
 function Naut_SendMessage(msg)
-	SendChatMessage(msg, "CHANNEL", nil, GetChannelName(dataChannel) )
+  local now = GetTime()
+  if not lastMessage or ((now - lastMessage) > Nauticus.msgThrottle) then
+     lastMessage = now
+     local channel = GetChannelName(dataChannel)
+     local cached = table.getn(Nauticus.msgCache)
+     if cached > 0 then
+       if msg then
+         SendChatMessage(table.remove(Nauticus.msgCache,1),"CHANNEL", nil, channel)
+         table.insert(Nauticus.msgCache,msg)
+       else
+         SendChatMessage(table.remove(Nauticus.msgCache,1),"CHANNEL", nil, channel)
+       end
+     else
+       if msg then
+         SendChatMessage(msg,"CHANNEL",nil, channel)
+       end
+     end
+  else
+    if msg then
+      table.insert(Nauticus.msgCache,msg)
+    end
+  end
 end
 
 function Naut_ParseMessage(arg1, arg2)
@@ -953,7 +980,7 @@ function Naut_GetArgs(message, separator)
 	local i = 0
 
 	-- search for seperators in the string and return the separated data
-	for value in string.gmatch(message, "[^"..separator.."]+") do
+	for value in string.gfind(message, "[^"..separator.."]+") do
 		i = i + 1
 		args[i] = value
 	end

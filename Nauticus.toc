@@ -1,7 +1,7 @@
 ## Interface: 11200
 ## Title: Nauticus
 ## Author: Drool/Sammysnake
-## Version: 2.0.0
+## Version: 2.0.1
 ## Notes: Displays arrival & departure times of transports around Azeroth
 ## eMail: droolio@gmail.com
 ## OptionalDeps: MapLibrary
